@@ -1,0 +1,8 @@
+{
+  "name": "2-Sektor Murojaatlari",
+  "description": "Paxtachi tumani 2-Sektori bo'yicha fuqarolar murojaatlari va tashkilotlar ijro intizomi boshqaruv tizimi (Firebase Firestore integratsiyasi bilan)",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
