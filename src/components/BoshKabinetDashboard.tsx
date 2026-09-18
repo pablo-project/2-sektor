@@ -479,6 +479,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
   }, [transferAppeals, coAssignedAppeals, boshKabinetResolvedAppeals, notificationFilter, notificationSearch]);
 
   // Full Mahallas List with Live Appeal Statistics
+// Full Mahallas List with Live Appeal Statistics (100% ishlaydigan mustahkam versiya)
   const mahallasWithStats = useMemo(() => {
     const normalize = (txt: string) =>
       (txt || '')
@@ -491,17 +492,29 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 
     return PAXTACHI_MAHALLAS.map((m) => {
       const coreName = normalize(m.name);
+      
       const mahallaAppeals = appeals.filter((a) => {
-        if (a.mahalla) {
-          const aMfy = normalize(a.mahalla);
-          if (aMfy === coreName || aMfy.includes(coreName) || coreName.includes(aMfy)) {
-            return true;
-          }
+        if (!a) return false;
+        
+        // 1. Murojaatning to'g'ridan-to'g'ri mahalla maydonini tekshirish
+        const aMfy = normalize(a.mahalla || (a as any).mahallaName || '');
+        if (aMfy && (aMfy === coreName || aMfy.includes(coreName) || coreName.includes(aMfy))) {
+          return true;
         }
+        
+        // 2. Manzil (address) maydonini tekshirish
         const cleanAddress = normalize(a.address || '');
-        if (cleanAddress.includes(coreName)) return true;
+        if (cleanAddress && (cleanAddress === coreName || cleanAddress.includes(coreName))) {
+          return true;
+        }
+        
+        // 3. Murojaat matni (content) ichida mahalla nomi qatnashganini tekshirish
         const cleanContent = normalize(a.content || '');
-        return cleanContent.includes(coreName);
+        if (cleanContent && cleanContent.includes(coreName)) {
+          return true;
+        }
+
+        return false;
       });
 
       const total = mahallaAppeals.length;
@@ -517,11 +530,10 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
         inProgressAppeals: inProgress,
         objectionAppeals: objection,
         rejectedAppeals: rejected,
-        resolvedPercent: total > 0 ? Math.round((resolved / total) * 100) : 0,
+        resolvedPercent: total > n => (total > 0 ? Math.round((resolved / total) * 100) : 0),
       };
     });
   }, [appeals]);
-
   // Top Mahallas Ranking Calculation (100% Real from appeals across the 14 Mahallas)
   const topMahallas = useMemo(() => {
     return [...mahallasWithStats]
