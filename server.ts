@@ -514,18 +514,20 @@ let telegramBot: any = null;
 let botInfo: BotStatusInfo = { isActive: false };
 
 export const MAHALLALAR_LIST: string[] = [
-  'Ko‘rpa MFY',
-  'Toma MFY',
-  'Burqut MFY',
-  'Humarmand MFY',
-  'Go‘ro‘g‘li MFY',
-  'Qo‘shhovuz MFY',
-  'To‘g‘olon MFY',
-  'Sardoba MFY',
-  'Yobu MFY',
-  'Quvondiq MFY',
-  'Mirzo Olim MFY',
-  'Mirzo Nodim MFY',
+  'Shamsnazar MFY',
+  'Boltali MFY',
+  'Ukrash MFY',
+  'Jona MFY',
+  'Zarafshon MFY',
+  'Nayman MFY',
+  'Qaynarbuloq MFY',
+  'Chorgusha MFY',
+  'Bog‘oloni MFY',
+  'Dung MFY',
+  'Keshtali MFY',
+  'Urg‘uch MFY',
+  'Dabusqala MFY',
+  'Farovon Yuldoshobod MFY',
 ];
 
 function getMfyInlineKeyboard(page: number = 0) {

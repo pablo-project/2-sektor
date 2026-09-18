@@ -1222,7 +1222,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-[11px] font-bold text-blue-400 tracking-wider">1-SEKTOR</div>
+                  <div className="text-[11px] font-bold text-blue-400 tracking-wider">2-sektor</div>
                   <div className="text-base font-extrabold text-white tracking-tight leading-tight">Murojaatlari</div>
                 </div>
               </div>
@@ -1367,7 +1367,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
             </div>
             <div>
               <div className="text-xs font-bold text-white">Yordam markazi</div>
-              <div className="text-[11px] text-slate-400">1-Sektor shtabi</div>
+              <div className="text-[11px] text-slate-400">2-sektor shtabi</div>
             </div>
           </div>
         </div>
@@ -1508,7 +1508,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                   <User className="w-5 h-5" />
                 </div>
                 <div className="text-left hidden sm:block">
-                  <div className={`text-xs font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>1-Sektor</div>
+                  <div className={`text-xs font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>2-sektor</div>
                   <div className="text-[11px] text-slate-400 font-medium">Bosh Administrator</div>
                 </div>
                 <ChevronDown className="w-4 h-4 text-slate-400" />
@@ -1522,8 +1522,8 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                     : 'bg-white border-slate-200/90 text-slate-900'
                 }`}>
                   <div className={`px-4 py-2.5 border-b ${isDarkMode ? 'border-slate-800' : 'border-slate-100'}`}>
-                    <div className={`text-xs font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>1-Sektor Rahbariyati</div>
-                    <div className="text-[11px] text-slate-400">1-Sektor Shtabi</div>
+                    <div className={`text-xs font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>2-sektor Rahbariyati</div>
+                    <div className="text-[11px] text-slate-400">2-sektor Shtabi</div>
                   </div>
 
                   <div className="py-1">
@@ -1544,8 +1544,8 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                         {isDarkMode ? 'Tun' : 'Kun'}
                       </span>
                     </button>
-                    <div className="text-xs font-bold text-slate-900">1-Sektor Rahbariyati</div>
-                    <div className="text-[11px] text-slate-500">1-Sektor Shtabi</div>
+                    <div className="text-xs font-bold text-slate-900">2-sektor Rahbariyati</div>
+                    <div className="text-[11px] text-slate-500">2-sektor Shtabi</div>
                   </div>
 
                   <div className="py-1">
@@ -2067,7 +2067,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                       <span>{PAXTACHI_MAHALLAS.length} ta mahalla kesimida</span>
                       <ChevronRight className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
                     </button>
-                    <span className="text-blue-600 dark:text-blue-400 font-bold">1-Sektor</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-bold">2-sektor</span>
                   </div>
                 </div>
 
@@ -3056,7 +3056,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                   <div className="space-y-2 max-w-2xl">
                     <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-xs font-bold text-indigo-300">
                       <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-                      <span>1-Sektor Xavfsizlik & Kirish Kodlari Markazi</span>
+                      <span>2-sektor Xavfsizlik & Kirish Kodlari Markazi</span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
                       Tashkilotlar Kirish Kodlari va Xavfsizlik Nazorati
@@ -3098,7 +3098,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                     </div>
                   </div>
                   <div className="text-2xl font-black text-slate-900 dark:text-white">{organizations.length} ta</div>
-                  <span className="text-[11px] text-slate-400 dark:text-slate-500 font-semibold mt-1 block">1-Sektor mas'ul idoralari</span>
+                  <span className="text-[11px] text-slate-400 dark:text-slate-500 font-semibold mt-1 block">2-sektor mas'ul idoralari</span>
                 </div>
 
                 <div className="bg-white dark:bg-[#0c1628] border border-emerald-200/70 dark:border-emerald-800/60 p-5 rounded-3xl shadow-xs transition-colors">
@@ -3452,7 +3452,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                       <div className="space-y-2 max-w-2xl">
                         <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-500/20 border border-blue-400/30 rounded-full text-xs font-bold text-blue-200">
                           <Briefcase className="w-3.5 h-3.5" />
-                          <span>1-Sektor Shtab A'zolari & 15 ta Tashkilot</span>
+                          <span>2-sektor Shtab A'zolari & 15 ta Tashkilot</span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
                           15 ta Shtab A'zosi Tashkilotlari Vazifalari & Ijro Intizomi
@@ -5164,10 +5164,10 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                 <div>
                   <div className="flex items-center space-x-2">
                     <h3 className="text-lg font-black text-slate-900 dark:text-white">
-                      1-Sektor Barcha Mahallalari ({PAXTACHI_MAHALLAS.length} ta MFY)
+                      2-sektor Barcha Mahallalari ({PAXTACHI_MAHALLAS.length} ta MFY)
                     </h3>
                     <span className="px-2.5 py-0.5 bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 text-[11px] font-extrabold rounded-full">
-                      1-Sektor hududi
+                      2-sektor hududi
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -5368,7 +5368,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                 <div>
                   <div className="flex items-center space-x-2">
                     <h3 className="text-lg font-black text-slate-900 dark:text-white">
-                      1-Sektor Barcha Mas'ul Tashkilotlari ({organizations.length} ta)
+                      2-sektor Barcha Mas'ul Tashkilotlari ({organizations.length} ta)
                     </h3>
                     <span className="px-2.5 py-0.5 bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 text-[11px] font-extrabold rounded-full">
                       Ijro monitoringi
@@ -5763,7 +5763,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                 </div>
                 <div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white">Yangi Topshiriq / Vazifa Biriktirish</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">1-Sektor shtab a'zolari va tashkilotlar uchun (bir yoki bir nechta tashkilotga)</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">2-sektor shtab a'zolari va tashkilotlar uchun (bir yoki bir nechta tashkilotga)</p>
                 </div>
               </div>
               <button
