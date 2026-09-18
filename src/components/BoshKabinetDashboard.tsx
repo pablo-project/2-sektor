@@ -569,6 +569,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 
   // Top Shtab Tasks Ranking Calculation (100% Real from tasks)
 // TOP Shtab Tasks Ranking Calculation
+// Top Shtab Tasks Ranking Calculation
 const topTasksStats = useMemo(() => {
   const orgTaskMap: { [orgId: string]: { id: string; name: string; total: number; approved: number; inProgress: number; underReview: number } } = {};
   
@@ -581,17 +582,21 @@ const topTasksStats = useMemo(() => {
       organizations.forEach((org) => {
         if (orgTaskMap[org.id]) {
           orgTaskMap[org.id].total += 1;
-          // Shuni o'zgartiramiz: 'tasdiqlandi' yoki 'tekshiruvda' bo'lsa bajarilgan deb sanaymiz
-          if (t.status === 'tasdiqlandi' || t.status === 'tekshiruvda') orgTaskMap[org.id].approved += 1;
-          else if (t.status === 'tekshiruvda') orgTaskMap[org.id].underReview += 1;
-          else orgTaskMap[org.id].inProgress += 1;
+          // Mana bu yerda 'tasdiqlandi' yoki 'tekshiruvda' bo'lsa approved ga qo'shiladi:
+          if (t.status === 'tasdiqlandi' || t.status === 'tekshiruvda') {
+            orgTaskMap[org.id].approved += 1;
+          } else if (t.status === 'jarayonda') {
+            orgTaskMap[org.id].inProgress += 1;
+          }
         }
       });
     } else if (orgTaskMap[t.targetOrgId]) {
       orgTaskMap[t.targetOrgId].total += 1;
-      if (t.status === 'tasdiqlandi' || t.status === 'tekshiruvda') orgTaskMap[t.targetOrgId].approved += 1;
-      else if (t.status === 'tekshiruvda') orgTaskMap[t.targetOrgId].underReview += 1;
-      else orgTaskMap[t.targetOrgId].inProgress += 1;
+      if (t.status === 'tasdiqlandi' || t.status === 'tekshiruvda') {
+        orgTaskMap[t.targetOrgId].approved += 1;
+      } else if (t.status === 'jarayonda') {
+        orgTaskMap[t.targetOrgId].inProgress += 1;
+      }
     }
   });
 
