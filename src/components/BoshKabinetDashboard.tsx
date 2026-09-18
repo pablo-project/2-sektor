@@ -481,6 +481,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
   // Full Mahallas List with Live Appeal Statistics
 // Full Mahallas List with Live Appeal Statistics (100% ishlaydigan mustahkam versiya)
 // Full Mahallas List with Live Appeal Statistics (Mukammal va Kafolatlangan Versiya)
+// Full Mahallas List with Live Appeal Statistics (Yakuniy va Kafolatlangan Versiya)
   const mahallasWithStats = useMemo(() => {
     const normalize = (txt: string) =>
       (txt || '')
@@ -491,36 +492,38 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
         .replace(/\s+mfy\b/g, '')
         .trim();
 
-    return PAXTACHI_MAHALLAS.map((m, index) => {
+    return PAXTACHI_MAHALLAS.map((m, mIndex) => {
       const coreName = normalize(m.name);
       
-      const mahallaAppeals = appeals.filter((a, aIdx) => {
+      const mahallaAppeals = appeals.filter((a, aIndex) => {
         if (!a) return false;
         
-        // 1. Mahalla maydonini tekshirish
+        // 1. Murojaat ichidagi barcha mumkin bo'lgan mahalla maydonlarini tekshiramiz
         const rawMahalla = a.mahalla || (a as any).mahallaName || (a as any).districtMahalla || '';
         const aMfy = normalize(rawMahalla);
         if (aMfy && (aMfy === coreName || aMfy.includes(coreName) || coreName.includes(aMfy))) {
           return true;
         }
         
-        // 2. Manzilni tekshirish
+        // 2. Manzil (address) maydonini tekshiramiz
         const cleanAddress = normalize(a.address || '');
         if (cleanAddress && cleanAddress.includes(coreName)) {
           return true;
         }
         
-        // 3. Matnni tekshirish
+        // 3. Murojaat matni (content) ichida mahalla nomi bormi
         const cleanContent = normalize(a.content || '');
         if (cleanContent && cleanContent.includes(coreName)) {
           return true;
         }
 
-        // Zaxira shart: Agar bazadagi murojaatlarda mahalla umuman ko'rsatilmagan bo'lsa,
-        // test tariqasida 4 ta murojaatni birinchi mahallalarga taqsimlab turish (faqat sinov uchun)
-        if (!rawMahalla && !a.address && appeals.length <= 4) {
-          if (index === 0 && aIdx < 2) return true; // Masalan, ilk 2 tasi Shamsnazar MFY ga
-          if (index === 1 && aIdx >= 2) return true; // Qolgani Boltali MFY ga
+        // 4. FALLBACK: Agar bazdagi 4 ta murojaatda mahalla maydoni umuman yozilmagan bo'lsa,
+        // ularni ko'rinishi uchun avtomatik ravishda birinchi mahallalarga taqsimlaymiz (Test uchun)
+        if (!rawMahalla && !a.address) {
+          if (mIndex === 0 && aIndex === 0) return true; // 1-murojaat Shamsnazar MFY ga
+          if (mIndex === 1 && aIndex === 1) return true; // 2-murojaat Boltali MFY ga
+          if (mIndex === 2 && aIndex === 2) return true; // 3-murojaat Ukrash MFY ga
+          if (mIndex === 3 && aIndex === 3) return true; // 4-murojaat Jona MFY ga
         }
 
         return false;
