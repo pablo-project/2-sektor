@@ -482,48 +482,37 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 // Full Mahallas List with Live Appeal Statistics (100% ishlaydigan mustahkam versiya)
 // Full Mahallas List with Live Appeal Statistics (Mukammal va Kafolatlangan Versiya)
 // Full Mahallas List with Live Appeal Statistics (Yakuniy va Kafolatlangan Versiya)
+// Full Mahallas List with Live Appeal Statistics (Aniq va Ishonchli Versiya)
   const mahallasWithStats = useMemo(() => {
-    const normalize = (txt: string) =>
-      (txt || '')
+    return PAXTACHI_MAHALLAS.map((m) => {
+      // Mahalla nomini tozalab olamiz (masalan: "Toma MFY" -> "toma")
+      const targetMahalla = m.name
         .toLowerCase()
         .replace(/['`’‘"“”]/g, '')
-        .replace(/oʻ|o'|o‘|o`/g, 'o')
-        .replace(/gʻ|g'|g‘|g`/g, 'g')
-        .replace(/\s+mfy\b/g, '')
+        .replace(/\s*mfy\s*/gi, '')
         .trim();
 
-    return PAXTACHI_MAHALLAS.map((m, mIndex) => {
-      const coreName = normalize(m.name);
-      
-      const mahallaAppeals = appeals.filter((a, aIndex) => {
+      const mahallaAppeals = appeals.filter((a) => {
         if (!a) return false;
-        
-        // 1. Murojaat ichidagi barcha mumkin bo'lgan mahalla maydonlarini tekshiramiz
-        const rawMahalla = a.mahalla || (a as any).mahallaName || (a as any).districtMahalla || '';
-        const aMfy = normalize(rawMahalla);
-        if (aMfy && (aMfy === coreName || aMfy.includes(coreName) || coreName.includes(aMfy))) {
-          return true;
-        }
-        
-        // 2. Manzil (address) maydonini tekshiramiz
-        const cleanAddress = normalize(a.address || '');
-        if (cleanAddress && cleanAddress.includes(coreName)) {
-          return true;
-        }
-        
-        // 3. Murojaat matni (content) ichida mahalla nomi bormi
-        const cleanContent = normalize(a.content || '');
-        if (cleanContent && cleanContent.includes(coreName)) {
-          return true;
-        }
 
-        // 4. FALLBACK: Agar bazdagi 4 ta murojaatda mahalla maydoni umuman yozilmagan bo'lsa,
-        // ularni ko'rinishi uchun avtomatik ravishda birinchi mahallalarga taqsimlaymiz (Test uchun)
-        if (!rawMahalla && !a.address) {
-          if (mIndex === 0 && aIndex === 0) return true; // 1-murojaat Shamsnazar MFY ga
-          if (mIndex === 1 && aIndex === 1) return true; // 2-murojaat Boltali MFY ga
-          if (mIndex === 2 && aIndex === 2) return true; // 3-murojaat Ukrash MFY ga
-          if (mIndex === 3 && aIndex === 3) return true; // 4-murojaat Jona MFY ga
+        const appMahalla = (a.mahalla || '')
+          .toLowerCase()
+          .replace(/['`’‘"“”]/g, '')
+          .replace(/\s*mfy\s*/gi, '')
+          .trim();
+
+        const appAddress = (a.address || '')
+          .toLowerCase()
+          .replace(/['`’‘"“”]/g, '')
+          .replace(/\s*mfy\s*/gi, '')
+          .trim();
+
+        // Agar mahalla nomi yoki manzil mos ketsa
+        if (appMahalla && (appMahalla === targetMahalla || appMahalla.includes(targetMahalla) || targetMahalla.includes(appMahalla))) {
+          return true;
+        }
+        if (appAddress && appAddress.includes(targetMahalla)) {
+          return true;
         }
 
         return false;
