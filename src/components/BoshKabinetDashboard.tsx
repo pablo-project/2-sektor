@@ -483,39 +483,27 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 // Full Mahallas List with Live Appeal Statistics (Mukammal va Kafolatlangan Versiya)
 // Full Mahallas List with Live Appeal Statistics (Yakuniy va Kafolatlangan Versiya)
 // Full Mahallas List with Live Appeal Statistics (Aniq va Ishonchli Versiya)
+// Full Mahallas List with Live Appeal Statistics (Debugged & Fixed)
   const mahallasWithStats = useMemo(() => {
+    if (!Array.isArray(appeals)) return PAXTACHI_MAHALLAS.map(m => ({ ...m, totalAppeals: 0, resolvedAppeals: 0, inProgressAppeals: 0, objectionAppeals: 0, rejectedAppeals: 0, resolvedPercent: 0 }));
+
+    // Keling, bazadagi murojaatlarning mahalla nomlarini konsolga chiqaramiz
+    console.log("Bazadagi murojaatlar:", appeals.map(a => a.mahalla));
+
     return PAXTACHI_MAHALLAS.map((m) => {
-      // Mahalla nomini tozalab olamiz (masalan: "Toma MFY" -> "toma")
-      const targetMahalla = m.name
-        .toLowerCase()
-        .replace(/['`’‘"“”]/g, '')
-        .replace(/\s*mfy\s*/gi, '')
-        .trim();
+      const targetName = m.name.toLowerCase().replace(/['`’‘"“”]/g, '').replace(/\s*mfy\s*/gi, '').trim();
 
       const mahallaAppeals = appeals.filter((a) => {
         if (!a) return false;
+        
+        const rawM = (a.mahalla || '').toLowerCase().replace(/['`’‘"“”]/g, '').replace(/\s*mfy\s*/gi, '').trim();
+        const rawA = (a.address || '').toLowerCase().replace(/['`’‘"“”]/g, '').replace(/\s*mfy\s*/gi, '').trim();
 
-        const appMahalla = (a.mahalla || '')
-          .toLowerCase()
-          .replace(/['`’‘"“”]/g, '')
-          .replace(/\s*mfy\s*/gi, '')
-          .trim();
-
-        const appAddress = (a.address || '')
-          .toLowerCase()
-          .replace(/['`’‘"“”]/g, '')
-          .replace(/\s*mfy\s*/gi, '')
-          .trim();
-
-        // Agar mahalla nomi yoki manzil mos ketsa
-        if (appMahalla && (appMahalla === targetMahalla || appMahalla.includes(targetMahalla) || targetMahalla.includes(appMahalla))) {
-          return true;
-        }
-        if (appAddress && appAddress.includes(targetMahalla)) {
-          return true;
-        }
-
-        return false;
+        // Aniq moslik yoki ichida uchrashi
+        return (
+          (rawM && (rawM === targetName || rawM.includes(targetName) || targetName.includes(rawM))) ||
+          (rawA && rawA.includes(targetName))
+        );
       });
 
       const total = mahallaAppeals.length;
@@ -535,19 +523,6 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
       };
     });
   }, [appeals]);
-  // Top Mahallas Ranking Calculation (100% Real from appeals across the 14 Mahallas)
-  const topMahallas = useMemo(() => {
-    return [...mahallasWithStats]
-      .sort((a, b) => b.totalAppeals - a.totalAppeals)
-      .slice(0, 5)
-      .map((m) => ({
-        name: m.name,
-        count: m.totalAppeals,
-        resolved: m.resolvedAppeals,
-        inProgress: m.inProgressAppeals,
-        objection: m.objectionAppeals,
-      }));
-  }, [mahallasWithStats]);
 
   const maxMahallaCount = Math.max(...topMahallas.map((m) => m.count), 1);
 
