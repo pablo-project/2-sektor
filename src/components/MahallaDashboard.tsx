@@ -86,24 +86,25 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
     return { total, yangi, inProgress, completed, percent };
   }, [mahallaTasks]);
 
-  // Filtered appeals for this mahalla
+  // Robust Filtered appeals for this mahalla
   const mahallaAppeals = useMemo(() => {
     if (!appeals || !Array.isArray(appeals)) return [];
     const mName = mahalla.name.toLowerCase().trim();
-    const mClean = mahalla.name.replace(/\s*mfy\s*/gi, '').toLowerCase().trim();
+    const mClean = mahalla.name.replace(/\s*mfy\s*/gi, '').replace(/['`’‘"“”]/g, '').toLowerCase().trim();
 
     return appeals.filter((appeal) => {
       if (!appeal) return false;
       const appM = (appeal.mahalla || '').toLowerCase().trim();
-      const appMClean = appM.replace(/\s*mfy\s*/gi, '').toLowerCase().trim();
+      const appMClean = appM.replace(/\s*mfy\s*/gi, '').replace(/['`’‘"“”]/g, '').toLowerCase().trim();
       const appAddr = (appeal.address || '').toLowerCase().trim();
+      const appContent = (appeal.content || '').toLowerCase().trim();
 
-      if (appM && (appM === mName || appMClean === mClean || (mClean.length > 2 && appM.includes(mClean)))) {
+      if (appM && (appM === mName || appMClean === mClean || (mClean.length > 2 && (appM.includes(mClean) || mClean.includes(appMClean))))) {
         return true;
       }
-      if (appAddr && (mClean.length > 2 && appAddr.includes(mClean))) {
-        return true;
-      }
+      if (appAddr && (mClean.length > 2 && appAddr.includes(mClean))) return true;
+      if (appContent && (mClean.length > 3 && appContent.includes(mClean))) return true;
+      
       return false;
     });
   }, [appeals, mahalla.name]);
@@ -194,7 +195,7 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
           <div className="space-y-2 sm:space-y-3">
             <div className="inline-flex items-center space-x-1.5 sm:space-x-2 px-2.5 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-[11px] sm:text-xs font-bold text-indigo-300">
               <Users className="w-3.5 h-3.5" />
-              <span>1-Sektor • Mahalla Yettiligi Ishchi Paneli</span>
+              <span>2-Sektor • Mahalla Yettiligi Ishchi Paneli</span>
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white flex items-center space-x-2">
@@ -213,7 +214,7 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
             </div>
           </div>
 
-          {/* Quick Stats Badges (2x2 on mobile, 4x1 on tablet/desktop) */}
+          {/* Quick Stats Badges */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full lg:w-auto">
             <div className="bg-slate-800/80 border border-slate-700/60 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl text-center">
               <span className="text-[10px] sm:text-[11px] text-slate-400 block font-medium">Shtab Vazifalari</span>
@@ -235,9 +236,8 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
         </div>
       </div>
 
-      {/* Navigation Switcher Tabs with touch horizontal scroll */}
+      {/* Navigation Switcher Tabs */}
       <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar smooth-scroll pb-1 border-b border-slate-200 dark:border-slate-800 -mx-1 px-1">
-        {/* TAB 1: Tasks */}
         <button
           onClick={() => setActiveTab('tasks')}
           className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all whitespace-nowrap shrink-0 cursor-pointer min-h-[38px] ${
@@ -255,7 +255,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
           )}
         </button>
 
-        {/* TAB 2: Appeals */}
         <button
           onClick={() => setActiveTab('appeals')}
           className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all whitespace-nowrap shrink-0 cursor-pointer min-h-[38px] ${
@@ -273,7 +272,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
           )}
         </button>
 
-        {/* TAB 3: Yettilik */}
         <button
           onClick={() => setActiveTab('yettilik')}
           className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all whitespace-nowrap shrink-0 cursor-pointer min-h-[38px] ${
@@ -286,7 +284,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
           <span>👥 Yettilik (7)</span>
         </button>
 
-        {/* TAB 4: Guide */}
         <button
           onClick={() => setActiveTab('guide')}
           className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all whitespace-nowrap shrink-0 cursor-pointer min-h-[38px] ${
@@ -303,9 +300,7 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
       {/* ================= TAB 1: VAZIFALAR ================= */}
       {activeTab === 'tasks' && (
         <div className="space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
-          {/* Filter and Search Bar */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-            {/* Status Pills with touch horizontal scroll */}
             <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar smooth-scroll w-full md:w-auto pb-1 md:pb-0 -mx-1 px-1">
               <button
                 onClick={() => setStatusFilter('all')}
@@ -349,7 +344,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
               </button>
             </div>
 
-            {/* Search Input */}
             <div className="relative w-full md:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -362,7 +356,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
             </div>
           </div>
 
-          {/* Tasks Grid / List */}
           {displayedTasks.length === 0 ? (
             <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-8 sm:p-12 text-center border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
               <div className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-400">
@@ -391,7 +384,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                         : 'border-emerald-200 dark:border-emerald-500/30 bg-emerald-50/10 dark:bg-emerald-950/10'
                     }`}
                   >
-                    {/* Top Row: Task Number, Role Tag, Status */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-2.5 sm:pb-3">
                       <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
                         <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-slate-900 dark:bg-slate-800 text-white rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-black">
@@ -411,7 +403,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                         )}
                       </div>
 
-                      {/* Status Badge */}
                       <div>
                         {isNew && (
                           <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[11px] sm:text-xs font-bold rounded-full shadow-xs">
@@ -434,7 +425,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     </div>
 
-                    {/* Task Title & Description */}
                     <div className="space-y-1">
                       <h3 className="text-sm sm:text-base lg:text-lg font-bold text-slate-900 dark:text-slate-100">
                         {task.title}
@@ -444,7 +434,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </p>
                     </div>
 
-                    {/* Offline Xulosa Preview if saved */}
                     {task.xulosaText && (
                       <div className="p-3 sm:p-4 bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl sm:rounded-2xl space-y-1.5 sm:space-y-2">
                         <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-1.5">
@@ -460,7 +449,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     )}
 
-                    {/* Approver Note if completed */}
                     {isCompleted && task.approvedByOrgName && (
                       <div className="p-2.5 sm:p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs text-emerald-900 dark:text-emerald-200">
                         <div className="flex items-center space-x-2">
@@ -476,7 +464,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     )}
 
-                    {/* Actions Bar */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1.5 border-t border-slate-100 dark:border-slate-800">
                       <div className="text-[11px] text-slate-400 flex items-center space-x-1.5">
                         <Calendar className="w-3.5 h-3.5" />
@@ -484,7 +471,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
 
                       <div className="grid grid-cols-1 sm:flex sm:items-center gap-2">
-                        {/* 1-Button: BAJARAMAN (status: yangi) */}
                         {isNew && (
                           <button
                             onClick={() => onStartTask(task.id)}
@@ -496,7 +482,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                           </button>
                         )}
 
-                        {/* 2-Button: Xulosa Yozish / Tahrirlash */}
                         {(isInProgress || isCompleted) && (
                           <button
                             onClick={() => handleOpenXulosaModal(task)}
@@ -507,7 +492,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                           </button>
                         )}
 
-                        {/* 3-Button: Print Official Blank */}
                         <button
                           onClick={() => handlePrint(task)}
                           className="w-full sm:w-auto px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-1.5 cursor-pointer min-h-[38px]"
@@ -526,10 +510,9 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
         </div>
       )}
 
-      {/* ================= TAB 2: MAHALLA MUROJAATLARI (NEW - READ ONLY MONITORING) ================= */}
+      {/* ================= TAB 2: MAHALLA MUROJAATLARI ================= */}
       {activeTab === 'appeals' && (
         <div className="space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
-          {/* Read-only Information Banner */}
           <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-white dark:from-slate-900 dark:via-indigo-950/60 dark:to-slate-900 rounded-2xl p-3.5 sm:p-4 border border-blue-200/80 dark:border-indigo-800/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-start sm:items-center space-x-2.5 sm:space-x-3">
               <div className="p-2 sm:p-2.5 bg-blue-600 text-white rounded-xl shadow-xs shrink-0">
@@ -544,17 +527,9 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2 shrink-0">
-              <span className="px-2.5 py-1 bg-white dark:bg-slate-800 border border-blue-200 dark:border-slate-700 text-blue-700 dark:text-blue-300 font-bold text-[11px] sm:text-xs rounded-xl shadow-xs flex items-center space-x-1">
-                <Eye className="w-3.5 h-3.5" />
-                <span>Monitoring</span>
-              </span>
-            </div>
           </div>
 
-          {/* Filter and Search Bar for Appeals */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-            {/* Status Pills with touch horizontal scroll */}
             <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar smooth-scroll w-full md:w-auto pb-1 md:pb-0 -mx-1 px-1">
               <button
                 onClick={() => setAppealStatusFilter('all')}
@@ -610,7 +585,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
               )}
             </div>
 
-            {/* Search Input for Appeals */}
             <div className="relative w-full md:w-80">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -623,7 +597,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
             </div>
           </div>
 
-          {/* Appeals List */}
           {displayedAppeals.length === 0 ? (
             <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-8 sm:p-12 text-center border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
               <div className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-400">
@@ -656,7 +629,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                         : 'border-blue-200 dark:border-blue-500/30 bg-blue-50/10 dark:bg-blue-950/10'
                     }`}
                   >
-                    {/* Card Top: Number, Date, Status Badge */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-2.5 sm:pb-3">
                       <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                         <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-slate-900 dark:bg-slate-800 text-white rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-black">
@@ -673,7 +645,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                         </span>
                       </div>
 
-                      {/* Status Badges */}
                       <div>
                         {isNew && (
                           <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-white text-[11px] sm:text-xs font-bold rounded-full shadow-xs">
@@ -708,7 +679,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     </div>
 
-                    {/* Citizen and Address Row */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 bg-slate-50 dark:bg-slate-950/80 p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-slate-800 text-xs">
                       <div>
                         <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Fuqaro (Murojaatchi):</span>
@@ -736,7 +706,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     </div>
 
-                    {/* Assigned Organization & Co-assigned Orgs */}
                     <div className="p-2.5 sm:p-3 bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 rounded-xl sm:rounded-2xl flex flex-wrap items-center justify-between gap-2 text-xs">
                       <div className="flex items-center space-x-2">
                         <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
@@ -754,7 +723,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       )}
                     </div>
 
-                    {/* Citizen's Appeal Content */}
                     <div className="space-y-1">
                       <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                         Murojaat mazmuni:
@@ -764,7 +732,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     </div>
 
-                    {/* Appeal Attachment Preview if exists */}
                     {appeal.attachmentUrl && (
                       <div className="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl">
                         <ImageIcon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -781,7 +748,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     )}
 
-                    {/* Resolution Section if Resolved */}
                     {isResolved && (
                       <div className="p-3 sm:p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-xl sm:rounded-2xl space-y-2">
                         <div className="flex flex-wrap items-center justify-between gap-1 text-xs border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1.5">
@@ -823,27 +789,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                       </div>
                     )}
 
-                    {/* Explanations section if available */}
-                    {appeal.explanations && appeal.explanations.length > 0 && (
-                      <div className="p-2.5 sm:p-3 bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl sm:rounded-2xl space-y-1.5">
-                        <span className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center space-x-1.5">
-                          <Info className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                          <span>Tushuntirish xatlari ({appeal.explanations.length} ta)</span>
-                        </span>
-                        <div className="space-y-1.5">
-                          {appeal.explanations.map((exp) => (
-                            <div key={exp.id} className="text-xs text-amber-950 dark:text-amber-200 bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-200 dark:border-amber-700">
-                              <p className="italic font-medium">"{exp.text}"</p>
-                              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
-                                {exp.authorName} ({exp.organizationName}) • {new Date(exp.createdAt).toLocaleDateString('uz-UZ')}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Card Footer: Deadline & Details Button */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                       <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center space-x-1.5">
                         <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -968,7 +913,7 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
         </div>
       )}
 
-      {/* ================= MODAL: APPEAL DETAIL MODAL (READ ONLY) ================= */}
+      {/* ================= MODAL: APPEAL DETAIL MODAL ================= */}
       {selectedAppealForDetail && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
           <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 space-y-5 border border-slate-200 dark:border-slate-800 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -995,7 +940,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
             </div>
 
             <div className="space-y-4 text-xs">
-              {/* Citizen Information Card */}
               <div className="bg-slate-50 dark:bg-slate-950/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
                 <h4 className="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                   <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -1017,7 +961,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                 </div>
               </div>
 
-              {/* Responsible Org */}
               <div className="bg-indigo-50/70 dark:bg-indigo-950/40 p-4 rounded-2xl border border-indigo-200/80 dark:border-indigo-800 space-y-1.5">
                 <h4 className="font-bold text-indigo-950 dark:text-indigo-200 flex items-center space-x-1.5">
                   <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -1031,7 +974,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                 )}
               </div>
 
-              {/* Appeal Content */}
               <div className="space-y-1.5">
                 <h4 className="font-bold text-slate-800 dark:text-slate-200">Murojaat Mazmuni:</h4>
                 <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-line text-xs sm:text-sm">
@@ -1039,7 +981,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
                 </div>
               </div>
 
-              {/* Resolution if exists */}
               {selectedAppealForDetail.status === 'hal_etildi' && (
                 <div className="bg-emerald-50 dark:bg-emerald-950/40 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-2">
                   <h4 className="font-bold text-emerald-950 dark:text-emerald-200 flex items-center space-x-1.5">
@@ -1151,74 +1092,6 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
               >
                 {isSavingXulosa ? 'Saqlanmoqda...' : 'Saqlash va Blankaga Kiritish'}
               </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ================= PRINTABLE BLANKA (HIDDEN ON SCREEN, VISIBLE ON PRINT) ================= */}
-      {printTask && (
-        <div className="hidden print:block fixed inset-0 bg-white p-8 z-[9999] text-black">
-          <div className="border-4 border-slate-900 p-8 space-y-6 max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="text-center border-b-2 border-slate-900 pb-4 space-y-1">
-              <h2 className="text-xl font-black uppercase tracking-wider">
-                O‘zbekiston Respublikasi • Samarqand Viloyati
-              </h2>
-              <h3 className="text-lg font-bold">
-                Paxtachi Tumani 1-Sektor • "{mahalla.name}" Mahalla Yettiligi
-              </h3>
-              <p className="text-sm font-semibold">
-                RASMIY O‘RGANISH XULOSASI VA DALOLATNOMASI
-              </p>
-            </div>
-
-            {/* Meta details */}
-            <div className="grid grid-cols-2 gap-4 text-xs">
-              <div>
-                <p><b>Topshiriq raqami:</b> № {printTask.taskNumber}</p>
-                <p><b>Sana:</b> {new Date().toLocaleDateString('uz-UZ')}</p>
-                <p><b>Mahalla raisi:</b> {mahalla.chairman}</p>
-              </div>
-              <div>
-                <p><b>Mas'ul yettilik a'zosi:</b> {printTask.targetRole || 'Mahalla Yettiligi'}</p>
-                <p><b>Taqdim etiladigan tashkilot:</b> {printTask.targetOrgName || '1-Sektor Shtabi'}</p>
-              </div>
-            </div>
-
-            {/* Task Title */}
-            <div className="border-t border-b border-slate-300 py-3">
-              <h4 className="font-bold text-sm">Topshiriq mazmuni:</h4>
-              <p className="text-xs mt-1">{printTask.title}</p>
-              <p className="text-xs text-slate-700 mt-1">{printTask.description}</p>
-            </div>
-
-            {/* Xulosa matni */}
-            <div className="space-y-2 min-h-[250px]">
-              <h4 className="font-bold text-sm">O‘rganish natijasi va Mahalla Yettiligi xulosasi:</h4>
-              <div className="border border-slate-300 p-4 rounded-md text-xs leading-relaxed min-h-[200px]">
-                {printTask.xulosaText ? (
-                  printTask.xulosaText
-                ) : (
-                  <p className="text-slate-400 italic">
-                    (Ushbu joyga xulosa va ko‘rilgan choralar qayd etiladi)
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Signatures */}
-            <div className="pt-6 border-t-2 border-slate-900 grid grid-cols-2 gap-8 text-xs">
-              <div>
-                <p className="font-bold">Mahalla Yettiligi nomidan:</p>
-                <p className="mt-8">F.I.Sh: ______________________ Imzo: _______</p>
-                <p className="mt-2 text-[10px] text-slate-500">M.O‘. (Mahalla muhri)</p>
-              </div>
-              <div>
-                <p className="font-bold">Xulosani qabul qiluvchi tashkilot:</p>
-                <p className="mt-8">F.I.Sh: ______________________ Imzo: _______</p>
-                <p className="mt-2 text-[10px] text-slate-500">M.O‘. (Tashkilot muhri)</p>
-              </div>
             </div>
           </div>
         </div>
