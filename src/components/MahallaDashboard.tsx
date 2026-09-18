@@ -87,27 +87,27 @@ export const MahallaDashboard: React.FC<MahallaDashboardProps> = ({
   }, [mahallaTasks]);
 
   // Filtered appeals for this mahalla
-  const mahallaAppeals = useMemo(() => {
+const mahallaAppeals = useMemo(() => {
     if (!appeals || !Array.isArray(appeals)) return [];
     const mName = mahalla.name.toLowerCase().trim();
-    const mClean = mahalla.name.replace(/\s*mfy\s*/gi, '').toLowerCase().trim();
+    const mClean = mahalla.name.replace(/\s*mfy\s*/gi, '').replace(/['`’‘"“”]/g, '').toLowerCase().trim();
 
     return appeals.filter((appeal) => {
       if (!appeal) return false;
       const appM = (appeal.mahalla || '').toLowerCase().trim();
-      const appMClean = appM.replace(/\s*mfy\s*/gi, '').toLowerCase().trim();
+      const appMClean = appM.replace(/\s*mfy\s*/gi, '').replace(/['`’‘"“”]/g, '').toLowerCase().trim();
       const appAddr = (appeal.address || '').toLowerCase().trim();
+      const appContent = (appeal.content || '').toLowerCase().trim();
 
-      if (appM && (appM === mName || appMClean === mClean || (mClean.length > 2 && appM.includes(mClean)))) {
+      if (appM && (appM === mName || appMClean === mClean || (mClean.length > 2 && (appM.includes(mClean) || mClean.includes(appMClean))))) {
         return true;
       }
-      if (appAddr && (mClean.length > 2 && appAddr.includes(mClean))) {
-        return true;
-      }
+      if (appAddr && (mClean.length > 2 && appAddr.includes(mClean))) return true;
+      if (appContent && (mClean.length > 3 && appContent.includes(mClean))) return true;
+      
       return false;
     });
   }, [appeals, mahalla.name]);
-
   const appealStats = useMemo(() => {
     const total = mahallaAppeals.length;
     const yangi = mahallaAppeals.filter((a) => a.status === 'yangi').length;
