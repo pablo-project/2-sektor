@@ -523,14 +523,14 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
       const objection = mahallaAppeals.filter((a) => a.feedback === 'etirozli').length;
       const rejected = mahallaAppeals.filter((a) => a.status === 'vakolatda_emas').length;
 
-      return {
+return {
         ...m,
         totalAppeals: total,
         resolvedAppeals: resolved,
         inProgressAppeals: inProgress,
         objectionAppeals: objection,
         rejectedAppeals: rejected,
-        resolvedPercent: total > n => (total > 0 ? Math.round((resolved / total) * 100) : 0),
+        resolvedPercent: total > 0 ? Math.round((resolved / total) * 100) : 0,
       };
     });
   }, [appeals]);
