@@ -539,32 +539,22 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
   const maxMahallaCount = Math.max(...topMahallas.map((m) => m.count), 1);
 
   // Top Organizations Ranking Calculation (100% Real from appeals)
-  const topOrganizations = useMemo(() => {
-    const orgMap: { [id: string]: { id: string; name: string; category: string; count: number; resolved: number } } = {};
-
-    organizations.forEach((org) => {
-      orgMap[org.id] = { id: org.id, name: org.name, category: org.category, count: 0, resolved: 0 };
-    });
-
+const topOrganizations = useMemo(() => {
+    const orgMap: any = {};
     appeals.forEach((a) => {
-      if (orgMap[a.organizationId]) {
-        orgMap[a.organizationId].count += 1;
-        if (a.status === 'hal_etildi') orgMap[a.organizationId].resolved += 1;
-      } else {
-        const found = organizations.find((o) => o.name === a.organizationName);
-        if (found) {
-          orgMap[found.id] = orgMap[found.id] || { id: found.id, name: found.name, category: found.category, count: 0, resolved: 0 };
-          orgMap[found.id].count += 1;
-          if (a.status === 'hal_etildi') orgMap[found.id].resolved += 1;
-        }
+      const found = organizations.find((o) => o.name === a.organizationName);
+      if (found) {
+        orgMap[found.id] = orgMap[found.id] || { id: found.id, name: found.name, category: found.category, count: 0, resolved: 0 };
+        orgMap[found.id].count += 1;
+        if (a.status === 'hal_etildi') orgMap[found.id].resolved += 1;
       }
     });
-
+    
     return Object.values(orgMap)
-      .sort((a, b) => b.count - a.count)
+      // 🔥 O'ZGARISH: Endi birinchi o'rinda eng ko'p "Hal etilgan" murojaati borlar chiqadi
+      .sort((a: any, b: any) => b.resolved - a.resolved || b.count - a.count)
       .slice(0, 5);
   }, [appeals, organizations]);
-
   const maxOrgCount = Math.max(...topOrganizations.map((o) => o.count), 1);
 
 
