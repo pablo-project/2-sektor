@@ -2156,9 +2156,10 @@ const topOrganizations = useMemo(() => {
                       </button>
                     </div>
 
-{/* Progress Bar List */}
-              <div className="space-y-4">
-                {topOrganizations.map((item: any, idx: number) => {
+                    {/* Progress Bar List */}
+                    <div className="space-y-4">
+                    {topOrganizations.map((item: any, idx: number) => {
+                  // Foizni hisoblash uchun joriy maksimal qiymatni topamiz
                   const currentMax = Math.max(...topOrganizations.map((o: any) => o.count), 1);
                   const pct = Math.round((item.count / currentMax) * 100);
 
@@ -2180,7 +2181,7 @@ const topOrganizations = useMemo(() => {
                           {item.count} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.resolved} hal)</span>
                         </span>
                       </div>
-                      {/* Indigo Progress bar */}
+                      {/* Dinamik chiziq */}
                       <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
                         <div
                           className="h-full bg-indigo-600 rounded-full transition-all duration-500 group-hover:bg-indigo-500"
@@ -2190,7 +2191,9 @@ const topOrganizations = useMemo(() => {
                     </div>
                   );
                 })}
-              </div>
+                    </div>
+                  </div>
+
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-between mt-4">
                     <button
                       onClick={() => setActiveTab('tasks')}
