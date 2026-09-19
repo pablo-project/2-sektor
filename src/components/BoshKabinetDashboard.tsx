@@ -2090,39 +2090,39 @@ const topOrganizations = useMemo(() => {
 
                     {/* Progress Bar List */}
                     <div className="space-y-4">
-                  {topOrganizations.map((item: any, idx: number) => {
-                  // Foizni hisoblash uchun ro'yxatdagi eng katta qiymatni topamiz
-                  const currentMax = Math.max(...topOrganizations.map((o: any) => o.count), 1);
-                  const pct = Math.round((item.count / currentMax) * 100);
-
-                  return (
-                    <div
-                      key={item.id}
-                      onClick={() => {
-                        setSelectedOrgFilter(item.id);
-                        setActiveTab('appeals');
-                      }}
-                      className="space-y-1.5 cursor-pointer group"
-                      title={`${item.name} murojaatlarini ko'rish`}
-                    >
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                        <span className="truncate pr-2">
-                          {idx + 1}. {item.name}
-                        </span>
-                        <span className="text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
-                          {item.count} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.resolved} hal)</span>
-                        </span>
-                      </div>
-                      {/* Indigo Progress bar */}
-                      <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
-                        <div
-                          className="h-full bg-indigo-600 rounded-full transition-all duration-500 group-hover:bg-indigo-500"
-                          style={{ width: `${item.count > 0 ? Math.max(pct, 2) : 0}%` }}
-                        />
-                      </div>
+                      {topOrganizations.map((item, idx) => {
+                        const pct = maxOrgCount > 0 ? Math.round((item.count / maxOrgCount) * 100) : 0;
+                        return (
+                          <div
+                            key={item.id}
+                            onClick={() => {
+                              setSelectedOrgFilter(item.id);
+                              setActiveTab('appeals');
+                            }}
+                            className="space-y-1.5 cursor-pointer group"
+                            title={`${item.name} murojaatlarini ko'rish`}
+                          >
+                            <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                              <span className="truncate max-w-[200px]">
+                                {idx + 1}. {item.name}
+                              </span>
+                              <span className="text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                                {item.count} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.resolved} hal)</span>
+                              </span>
+                            </div>
+                            {/* Indigo Progress Bar */}
+                            <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
+                              <div
+                                className="h-full bg-indigo-600 rounded-full transition-all duration-500 group-hover:bg-indigo-500"
+                                style={{ width: `${Math.max(pct, item.count > 0 ? 5 : 0)}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
+                  </div>
+
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-between">
                     <button
                       onClick={() => setShowAllOrganizationsModal(true)}
@@ -2156,41 +2156,41 @@ const topOrganizations = useMemo(() => {
                       </button>
                     </div>
 
-                    {/* Progress Bar List */}
-                    <div className="space-y-4">
-                      {topTasksStats.map((item, idx) => {
-                        const pct = maxTaskCount > 0 ? Math.round((item.total / maxTaskCount) * 100) : 0;
-                        return (
-                          <div
-                            key={item.id}
-                            onClick={() => {
-                              setTaskOrgFilter(item.id);
-                              setActiveTab('tasks');
-                            }}
-                            className="space-y-1.5 cursor-pointer group"
-                            title={`${item.name} vazifalarini ko'rish`}
-                          >
-                            <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
-                              <span className="truncate max-w-[220px]">
-                                {idx + 1}. {item.name}
-                              </span>
-                              <span className="text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400">
-                                {item.total} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.approved} bajarildi)</span>
-                              </span>
-                            </div>
-                            {/* Violet Progress Bar */}
-                            <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
-                              <div
-                                className="h-full bg-violet-600 rounded-full transition-all duration-500 group-hover:bg-violet-500"
-                                style={{ width: `${Math.max(pct, item.total > 0 ? 5 : 0)}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+{/* Progress Bar List */}
+              <div className="space-y-4">
+                {topOrganizations.map((item: any, idx: number) => {
+                  const currentMax = Math.max(...topOrganizations.map((o: any) => o.count), 1);
+                  const pct = Math.round((item.count / currentMax) * 100);
 
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => {
+                        setSelectedOrgFilter(item.id);
+                        setActiveTab('appeals');
+                      }}
+                      className="space-y-1.5 cursor-pointer group"
+                      title={`${item.name} murojaatlarini ko'rish`}
+                    >
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        <span className="truncate pr-2">
+                          {idx + 1}. {item.name}
+                        </span>
+                        <span className="text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                          {item.count} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.resolved} hal)</span>
+                        </span>
+                      </div>
+                      {/* Indigo Progress bar */}
+                      <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
+                        <div
+                          className="h-full bg-indigo-600 rounded-full transition-all duration-500 group-hover:bg-indigo-500"
+                          style={{ width: `${item.count > 0 ? Math.max(pct, 2) : 0}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-between mt-4">
                     <button
                       onClick={() => setActiveTab('tasks')}
