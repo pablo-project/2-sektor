@@ -23,7 +23,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 94 476-33-38',
     population: 3240,
     sector: 2,
-    password: 'paxtachi_101',
+    password: 'Shm#94Xz!',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Xaydarov Azizbek Normurodovich', phone: '+998 94 476-33-38' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Xujanova Shoxsanam Kuziboyevna', phone: '+998 93 818-99-77' },
@@ -41,7 +41,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 93 721-37-81',
     population: 2980,
     sector: 2,
-    password: 'paxtachi_102',
+    password: 'Blt$72Kq!',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Xolboyev Dallijon Norbutayevich', phone: '+998 93 721-37-81' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Shovxiyeva Munavvar Yo‘ldoshmurodovna', phone: '+998 95 887-13-08' },
@@ -59,7 +59,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: 'Kiritilmagan',
     population: 3560,
     sector: 2,
-    password: 'paxtachi_103',
+    password: 'Ukr$83Lm!',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Vakant', phone: 'Kiritilmagan' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Turdiyeva Gulbaxor Beknazarovna', phone: '+998 95 482-05-71' },
@@ -77,7 +77,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 99 451-63-77',
     population: 2890,
     sector: 2,
-    password: 'paxtachi_104',
+    password: 'Jon!81Ty#',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Allayarov Shaxriddin Norbekovich', phone: '+998 99 451-63-77' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Abdiyeva Dilfuza Jo‘raqulovna', phone: '+998 99 454-42-05' },
@@ -95,7 +95,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 99 247-99-00',
     population: 3720,
     sector: 2,
-    password: 'paxtachi_105',
+    password: 'Zrf*39Lp$',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Daliyev Saydulla Abdusamadovich', phone: '+998 99 247-99-00' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Mavlonova Marxabo Shodmonovna', phone: '+998 94 716-41-14' },
@@ -113,7 +113,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 99 128-77-08',
     population: 3100,
     sector: 2,
-    password: 'paxtachi_106',
+    password: 'Nym#64Vb^',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Narzullayev Xusniddin Eshmamatovich', phone: '+998 99 128-77-08' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Abdullayeva Dilorom Yuldashevna', phone: '+998 94 473-28-75' },
@@ -131,7 +131,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 93 860-13-74',
     population: 2750,
     sector: 2,
-    password: 'paxtachi_107',
+    password: 'Qyn$27Nc&',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Usmonova Tozagul Ravshanovna', phone: '+998 93 860-13-74' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Muxammadiyeva Dilrabo Bobonorovna', phone: '+998 99 343-34-13' },
@@ -149,7 +149,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 97 914-27-11',
     population: 3280,
     sector: 2,
-    password: 'paxtachi_108',
+    password: 'Chr@18Zx*',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Nazarov Latif Urazovich', phone: '+998 97 914-27-11' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Xujanova Shoxsanam Kuziboyevna', phone: '+998 93 818-99-77' },
@@ -167,7 +167,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 94 240-83-90',
     population: 2640,
     sector: 2,
-    password: 'paxtachi_109',
+    password: 'Bgl!93Aq#',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Turapov Sharofiddin Isanovich', phone: '+998 94 240-83-90' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Jo‘rayeva Dilafruz Baxridinovna', phone: '+998 77 800-10-81' },
@@ -185,7 +185,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 94 375-75-35',
     population: 2920,
     sector: 2,
-    password: 'paxtachi_110',
+    password: 'Dng*46Ws@',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Xalilov Abdinazar Abduraximovich', phone: '+998 94 375-75-35' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Pulatova Musallam Abduxakimovna', phone: '+998 93 837-86-66' },
@@ -203,7 +203,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 94 482-82-86',
     population: 3410,
     sector: 2,
-    password: 'paxtachi_111',
+    password: 'Ksh#82Ed!',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Boltayev G‘ulom Tursunmurodovich', phone: '+998 94 482-82-86' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Ergasheva Zilola Amirovna', phone: '+998 94 499-01-84' },
@@ -221,7 +221,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 93 373-05-71',
     population: 3150,
     sector: 2,
-    password: 'paxtachi_112',
+    password: 'Urg$15Rf%',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Turaqulov Mansurjon Ismoilovich', phone: '+998 93 373-05-71' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Uktamova Iroda Uktamovna', phone: '+998 93 083-91-87' },
@@ -239,7 +239,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 99 743-77-63',
     population: 3100,
     sector: 2,
-    password: 'paxtachi_113',
+    password: 'Dbs@79Tg^',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Qilichev Zokir Boboniyozovich', phone: '+998 99 743-77-63' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Muxammadiyeva Dilrabo Bobonorovna', phone: '+998 99 343-34-13' },
@@ -257,7 +257,7 @@ export const PAXTACHI_MAHALLAS: MahallaInfo[] = [
     phone: '+998 97 405-68-77',
     population: 3000,
     sector: 2,
-    password: 'paxtachi_114',
+    password: 'Frv!34Yh*',
     yettilik: [
       { role: 'raisi', roleTitle: 'Mahalla raisi', name: 'Saparov Xamidullo To‘lqinovich', phone: '+998 97 405-68-77' },
       { role: 'xotin_qizlar', roleTitle: 'Xotin-qizlar faoli', name: 'Shovxiyeva Munavvar Yo‘ldoshmurodovna', phone: '+998 95 887-13-08' },
