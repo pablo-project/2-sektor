@@ -567,9 +567,8 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 
   const maxOrgCount = Math.max(...topOrganizations.map((o) => o.count), 1);
 
-  // Top Shtab Tasks Ranking Calculation (100% Real from tasks)
-// Top Shtab Tasks Ranking Calculation
-// Top Shtab Tasks Ranking Calculation
+
+// Top Shtab Tasks Ranking Calculation (100% Real from tasks)
   const topTasksStats = useMemo(() => {
     const orgTaskMap: { [orgId: string]: { id: string; name: string; total: number; approved: number; inProgress: number; underReview: number } } = {};
     
@@ -582,49 +581,26 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
         organizations.forEach((org) => {
           if (orgTaskMap[org.id]) {
             orgTaskMap[org.id].total += 1;
-            if (t.status === 'tasdiqlandi') orgTaskMap[org.id].approved += 1;
-            else if (t.status === 'tekshiruvda') orgTaskMap[org.id].underReview += 1;
-            else orgTaskMap[org.id].inProgress += 1;
+            // 🔥 Hisobot topshirganlarni ham "bajarildi" deb hisoblaymiz
+            if (t.status === 'tasdiqlandi' || t.status === 'tekshiruvda') orgTaskMap[org.id].approved += 1;
+            else if (t.status === 'jarayonda') orgTaskMap[org.id].inProgress += 1;
           }
         });
       } else if (orgTaskMap[t.targetOrgId]) {
         orgTaskMap[t.targetOrgId].total += 1;
-        if (t.status === 'tasdiqlandi') orgTaskMap[t.targetOrgId].approved += 1;
-        else if (t.status === 'tekshiruvda') orgTaskMap[t.targetOrgId].underReview += 1;
-        else orgTaskMap[t.targetOrgId].inProgress += 1;
+        // 🔥 Hisobot topshirganlarni ham "bajarildi" deb hisoblaymiz
+        if (t.status === 'tasdiqlandi' || t.status === 'tekshiruvda') orgTaskMap[t.targetOrgId].approved += 1;
+        else if (t.status === 'jarayonda') orgTaskMap[t.targetOrgId].inProgress += 1;
       }
     });
 
     return Object.values(orgTaskMap)
+      // 🔥 Reytingni birinchi o'rinda BAJARILGANLAR soniga qarab tuzish
       .sort((a, b) => b.approved - a.approved || b.total - a.total)
       .slice(0, 5);
   }, [tasks, organizations]);
-
   const maxTaskCount = Math.max(...topTasksStats.map((t) => t.total), 1);
 
-  // Top Mahalla Yettiligi Tasks Ranking Calculation
-  const topMahallaYettiligiStats = useMemo(() => {
-    const mahallaTaskMap: { [mId: string]: { id: string; name: string; total: number; completed: number; inProgress: number; yangi: number } } = {};
-
-    PAXTACHI_MAHALLAS.forEach((m) => {
-      mahallaTaskMap[m.id] = { id: m.id, name: m.name, total: 0, completed: 0, inProgress: 0, yangi: 0 };
-    });
-
-    mahallaTasks.forEach((mt) => {
-      if (mahallaTaskMap[mt.mahallaId]) {
-        mahallaTaskMap[mt.mahallaId].total += 1;
-        if (mt.status === 'bajarildi') mahallaTaskMap[mt.mahallaId].completed += 1;
-        else if (mt.status === 'jarayonda') mahallaTaskMap[mt.mahallaId].inProgress += 1;
-        else mahallaTaskMap[mt.mahallaId].yangi += 1;
-      }
-    });
-
-    return Object.values(mahallaTaskMap)
-      .sort((a, b) => b.completed - a.completed || b.total - a.total)
-      .slice(0, 5);
-  }, [mahallaTasks]);
-
-  const maxMahallaTaskCount = Math.max(...topMahallaYettiligiStats.map((m) => m.total), 1);
   // Top Mahalla Yettiligi Tasks Ranking Calculation (100% Real from mahallaTasks)
   const topMahallaYettiligiStats = useMemo(() => {
     const mahallaTaskMap: { [mId: string]: { id: string; name: string; total: number; completed: number; inProgress: number; yangi: number } } = {};
