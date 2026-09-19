@@ -540,19 +540,27 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 
   // Top Organizations Ranking Calculation (100% Real from appeals)
 const topOrganizations = useMemo(() => {
-    const orgMap: any = {};
+    const orgMap: { [key: string]: { id: string; name: string; category: string; count: number; resolved: number } } = {};
+    
+    // 1. Avval barcha tashkilotlarni 0 qiymat bilan ro'yxatga qo'shamiz
+    organizations.forEach((org) => {
+      orgMap[org.id] = { id: org.id, name: org.name, category: org.category, count: 0, resolved: 0 };
+    });
+
+    // 2. Tushgan va hal etilgan murojaatlarni sanaymiz
     appeals.forEach((a) => {
-      const found = organizations.find((o) => o.name === a.organizationName);
-      if (found) {
-        orgMap[found.id] = orgMap[found.id] || { id: found.id, name: found.name, category: found.category, count: 0, resolved: 0 };
+      const found = organizations.find((o) => o.name === a.organizationName || o.id === a.organizationId);
+      if (found && orgMap[found.id]) {
         orgMap[found.id].count += 1;
-        if (a.status === 'hal_etildi') orgMap[found.id].resolved += 1;
+        if (a.status === 'hal_etildi') {
+          orgMap[found.id].resolved += 1;
+        }
       }
     });
     
+    // 3. Tartiblash: Eng ko'p hal qilganlar yuqoriga chiqadi
     return Object.values(orgMap)
-      // 🔥 O'ZGARISH: Endi birinchi o'rinda eng ko'p "Hal etilgan" murojaati borlar chiqadi
-      .sort((a: any, b: any) => b.resolved - a.resolved || b.count - a.count)
+      .sort((a, b) => b.resolved - a.resolved || b.count - a.count)
       .slice(0, 5);
   }, [appeals, organizations]);
   const maxOrgCount = Math.max(...topOrganizations.map((o) => o.count), 1);
