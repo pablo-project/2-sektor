@@ -2157,41 +2157,41 @@ const topOrganizations = useMemo(() => {
                     </div>
 
                     {/* Progress Bar List */}
-                    <div className="space-y-4">
-                    {topOrganizations.map((item: any, idx: number) => {
-                  // Foizni hisoblash uchun joriy maksimal qiymatni topamiz
-                  const currentMax = Math.max(...topOrganizations.map((o: any) => o.count), 1);
-                  const pct = Math.round((item.count / currentMax) * 100);
+       <div className="space-y-4">
+                {topTasksStats.map((item: any, idx: number) => {
+                  // Chiziqlar uzunligini hisoblash uchun eng ko'p vazifasi bor tashkilotni topamiz
+                  const currentMax = Math.max(...topTasksStats.map((t: any) => t.total), 1);
+                  const pct = Math.round((item.total / currentMax) * 100);
 
                   return (
                     <div
                       key={item.id}
                       onClick={() => {
                         setSelectedOrgFilter(item.id);
-                        setActiveTab('appeals');
+                        setActiveTab('tasks');
                       }}
                       className="space-y-1.5 cursor-pointer group"
-                      title={`${item.name} murojaatlarini ko'rish`}
+                      title={`${item.name} vazifalarini ko'rish`}
                     >
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                         <span className="truncate pr-2">
                           {idx + 1}. {item.name}
                         </span>
-                        <span className="text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
-                          {item.count} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.resolved} hal)</span>
+                        <span className="text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400">
+                          {item.total} ta <span className="text-emerald-600 dark:text-emerald-400 font-normal text-[11px]">({item.approved} bajarildi)</span>
                         </span>
                       </div>
-                      {/* Dinamik chiziq */}
+                      {/* Binafsha rangli dinamik chiziq */}
                       <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
                         <div
-                          className="h-full bg-indigo-600 rounded-full transition-all duration-500 group-hover:bg-indigo-500"
-                          style={{ width: `${item.count > 0 ? Math.max(pct, 2) : 0}%` }}
+                          className="h-full bg-purple-600 rounded-full transition-all duration-500 group-hover:bg-purple-500"
+                          style={{ width: `${item.total > 0 ? Math.max(pct, 2) : 0}%` }}
                         />
                       </div>
                     </div>
                   );
                 })}
-                    </div>
+              </div>
                   </div>
 
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-between mt-4">
