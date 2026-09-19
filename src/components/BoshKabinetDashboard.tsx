@@ -4488,12 +4488,88 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                 </div>
               )}
 
-              {selectedAppeal.resolutionText && (
+         {selectedAppeal.resolutionText && (
                 <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-4 rounded-2xl space-y-1.5">
                   <div className="font-bold text-emerald-900 dark:text-emerald-300">Bosh Tashkilot Ijro Xulosasi:</div>
                   <p className="text-emerald-800 dark:text-emerald-200">{selectedAppeal.resolutionText}</p>
                 </div>
               )}
+
+              {/* MUDDATNI UZAYTIRISH VA BOTGA YUBORISH BLOKI */}
+              <div className="bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 p-4 rounded-2xl space-y-3">
+                <div className="font-bold text-blue-900 dark:text-blue-300 flex items-center space-x-1.5 text-xs">
+                  <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span>Ijro muddatini o'zgartirish va botga izoh yuborish</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Yangi sana:</label>
+                    <input
+                      type="date"
+                      id="customExtendedDeadline"
+                      defaultValue={selectedAppeal.deadlineAt ? selectedAppeal.deadlineAt.split('T')[0] : ''}
+                      className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Fuqaroga yuboriladigan izoh:</label>
+                    <input
+                      type="text"
+                      id="extendedDeadlineNote"
+                      placeholder="Masalan: Qo'shimcha o'rganish talab etiladi..."
+                      className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-1">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const dateInput = (document.getElementById('customExtendedDeadline') as HTMLInputElement)?.value;
+                      const noteInput = (document.getElementById('extendedDeadlineNote') as HTMLInputElement)?.value;
+
+                      if (!dateInput) {
+                        alert('Iltimos, yangi sanani tanlang');
+                        return;
+                      }
+
+                      try {
+                        const res = await fetch(`/api/appeals/${selectedAppeal.id}/extend-deadline`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ newDeadline: dateInput, adminNote: noteInput }),
+                        });
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                          showToast('✅ Murojaat muddati uzaytirildi va bot orqali fuqaroga xabar yuborildi!');
+                          setSelectedAppeal(null);
+                          if (onRefresh) await onRefresh();
+                        } else {
+                          alert(data.error || 'Xatolik yuz berdi');
+                        }
+                      } catch (err: any) {
+                        alert('Server xatosi: ' + err.message);
+                      }
+                    }}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs flex items-center space-x-1.5"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Muddatni uzaytirish va yuborish</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+              <button
+                onClick={() => setSelectedAppeal(null)}
+                className="px-5 py-2.5 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold cursor-pointer transition-all"
+              >
+                Yopish
+              </button>
+            </div>
             </div>
 
             <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">

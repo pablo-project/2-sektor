@@ -3082,7 +3082,66 @@ app.patch('/api/appeals/:id/reject-authority', (req, res) => {
   saveSingleAppealToFirestore(appeal).catch(console.error); // 🔥 Bulutga saqlash
   res.json(appeal);
 });
+// =========================================================================
+// 🔥 YANGI QO'SHILGAN QISM: MUDDATNI UZAYTIRISH VA BOTGA YUBORISH
+// =========================================================================
+app.post('/api/appeals/:id/extend-deadline', async (req, res) => {
+  const { id } = req.params;
+  const { newDeadline, adminNote } = req.body;
 
+  if (!newDeadline) {
+    return res.status(400).json({ error: 'Yangi muddat ko‘rsatilishi shart' });
+  }
+
+  const appeal = appeals.find((a) => a.id === id);
+  if (!appeal) {
+    return res.status(404).json({ error: 'Murojaat topilmadi' });
+  }
+
+  // Muddatni yangilash
+  const parsedDate = new Date(newDeadline);
+  appeal.deadlineAt = isNaN(parsedDate.getTime()) ? newDeadline : parsedDate.toISOString();
+  
+  // Izohni saqlab qo'yish (istoriya uchun)
+  if (!appeal.explanations) {
+    appeal.explanations = [];
+  }
+  appeal.explanations.push({
+    id: `exp-deadline-${Date.now()}`,
+    text: `Muddat uzaytirildi. Yangi sana: ${new Date(appeal.deadlineAt).toLocaleDateString('uz-UZ')}. Izoh: ${adminNote || 'Ko‘rsatilmagan'}`,
+    authorName: 'Bosh Kabinet Admin',
+    organizationName: '2-Sektor Shtabi',
+    createdAt: new Date().toISOString(),
+  });
+
+  savePersistedData();
+  saveSingleAppealToFirestore(appeal).catch(console.error);
+
+  // Telegram bot orqali fuqaroga xabar yuborish
+  if (telegramBot && appeal.telegramChatId) {
+    try {
+      const formattedDate = new Date(appeal.deadlineAt).toLocaleDateString('uz-UZ', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      });
+
+      const messageText = 
+        `⏱️ <b>Murojaatingiz ijro muddati uzaytirildi</b>\n\n` +
+        `📄 <b>Murojaat №:</b> <code>${appeal.appealNumber}</code>\n` +
+        `🏢 <b>Tashkilot:</b> ${appeal.organizationName}\n` +
+        `📅 <b>Yangi belgilangan muddat:</b> ${formattedDate}\n\n` +
+        `💬 <b>Sektor shtabi izohi:</b>\n<i>"${adminNote || 'Qo‘shimcha o‘rganish vaqt talab etgani sababli muddat uzaytirildi.'}"</i>`;
+
+      await telegramBot.sendMessage(appeal.telegramChatId, messageText, { parse_mode: 'HTML' });
+    } catch (botErr: any) {
+      console.warn('Telegram muddat uzaytirish xabarini yuborishda xato:', botErr.message);
+    }
+  }
+
+  res.json({ success: true, appeal, message: 'Muddat muvaffaqiyatli uzaytirildi va fuqaroga xabar yuborildi' });
+});
+// =========================================================================
 app.patch('/api/appeals/:id/resolve', async (req, res) => {
   const { id } = req.params;
   const { resolutionText, resolutionPhotoUrl } = req.body;
