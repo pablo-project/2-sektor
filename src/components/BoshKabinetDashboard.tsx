@@ -568,6 +568,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
   const maxOrgCount = Math.max(...topOrganizations.map((o) => o.count), 1);
 
   // Top Shtab Tasks Ranking Calculation (100% Real from tasks)
+// Top Shtab Tasks Ranking Calculation
   const topTasksStats = useMemo(() => {
     const orgTaskMap: { [orgId: string]: { id: string; name: string; total: number; approved: number; inProgress: number; underReview: number } } = {};
     
@@ -594,10 +595,35 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
     });
 
     return Object.values(orgTaskMap)
-      .sort((a, b) => b.total - a.total || b.approved - a.approved)
+      // 🔥 O'ZGARISH MANA SHU YERDA: Endi birinchi o'rinda eng ko'p BAJARGANLAR chiqadi
+      .sort((a, b) => b.approved - a.approved || b.total - a.total)
       .slice(0, 5);
   }, [tasks, organizations]);
 
+  const maxTaskCount = Math.max(...topTasksStats.map((t) => t.total), 1);
+
+  // Top Mahalla Yettiligi Tasks Ranking Calculation
+  const topMahallaYettiligiStats = useMemo(() => {
+    const mahallaTaskMap: { [mId: string]: { id: string; name: string; total: number; completed: number; inProgress: number; yangi: number } } = {};
+
+    PAXTACHI_MAHALLAS.forEach((m) => {
+      mahallaTaskMap[m.id] = { id: m.id, name: m.name, total: 0, completed: 0, inProgress: 0, yangi: 0 };
+    });
+
+    mahallaTasks.forEach((mt) => {
+      if (mahallaTaskMap[mt.mahallaId]) {
+        mahallaTaskMap[mt.mahallaId].total += 1;
+        if (mt.status === 'bajarildi') mahallaTaskMap[mt.mahallaId].completed += 1;
+        else if (mt.status === 'jarayonda') mahallaTaskMap[mt.mahallaId].inProgress += 1;
+        else mahallaTaskMap[mt.mahallaId].yangi += 1;
+      }
+    });
+
+    return Object.values(mahallaTaskMap)
+      // 🔥 O'ZGARISH MANA SHU YERDA: Endi birinchi o'rinda eng ko'p BAJARGAN mahallalar chiqadi
+      .sort((a, b) => b.completed - a.completed || b.total - a.total)
+      .slice(0, 5);
+  }, [mahallaTasks]);
   const maxTaskCount = Math.max(...topTasksStats.map((t) => t.total), 1);
 
   // Top Mahalla Yettiligi Tasks Ranking Calculation (100% Real from mahallaTasks)
