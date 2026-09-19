@@ -3839,11 +3839,13 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                           org.category.toLowerCase().includes(q)
                         );
                       })
-                      .map((org) => {
-           const orgDone = orgTasks.filter((t) => t.status === 'tasdiqlandi' || t.status === 'tekshiruvda').length;
+                    .map((org) => {
+                        const orgTasks = tasks.filter((t) => t.targetOrgId === org.id);
+                        const orgProg = orgTasks.filter((t) => t.status === 'jarayonda').length;
+                        const orgReview = orgTasks.filter((t) => t.status === 'tekshiruvda').length;
+                        const orgDone = orgTasks.filter((t) => t.status === 'tasdiqlandi' || t.status === 'tekshiruvda').length;
 
                         const isIIB = org.code === 'IIB-01' || org.id === 'org-1' || org.name.toLowerCase().includes('iib');
-
                         return (
                           <div
                             key={org.id}
