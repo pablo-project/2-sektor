@@ -4488,7 +4488,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                 </div>
               )}
 
-         {selectedAppeal.resolutionText && (
+{selectedAppeal.resolutionText && (
                 <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-4 rounded-2xl space-y-1.5">
                   <div className="font-bold text-emerald-900 dark:text-emerald-300">Bosh Tashkilot Ijro Xulosasi:</div>
                   <p className="text-emerald-800 dark:text-emerald-200">{selectedAppeal.resolutionText}</p>
@@ -4570,20 +4570,9 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
                 Yopish
               </button>
             </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-              <button
-                onClick={() => setSelectedAppeal(null)}
-                className="px-5 py-2.5 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold cursor-pointer"
-              >
-                Yopish
-              </button>
-            </div>
           </div>
         </div>
       )}
-
       {/* 2. ADD NEW APPEAL MODAL */}
       {showAddAppealModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in">
