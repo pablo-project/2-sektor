@@ -569,6 +569,7 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
 
   // Top Shtab Tasks Ranking Calculation (100% Real from tasks)
 // Top Shtab Tasks Ranking Calculation
+// Top Shtab Tasks Ranking Calculation
   const topTasksStats = useMemo(() => {
     const orgTaskMap: { [orgId: string]: { id: string; name: string; total: number; approved: number; inProgress: number; underReview: number } } = {};
     
@@ -595,7 +596,6 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
     });
 
     return Object.values(orgTaskMap)
-      // 🔥 O'ZGARISH MANA SHU YERDA: Endi birinchi o'rinda eng ko'p BAJARGANLAR chiqadi
       .sort((a, b) => b.approved - a.approved || b.total - a.total)
       .slice(0, 5);
   }, [tasks, organizations]);
@@ -620,12 +620,11 @@ export const BoshKabinetDashboard: React.FC<BoshKabinetDashboardProps> = ({
     });
 
     return Object.values(mahallaTaskMap)
-      // 🔥 O'ZGARISH MANA SHU YERDA: Endi birinchi o'rinda eng ko'p BAJARGAN mahallalar chiqadi
       .sort((a, b) => b.completed - a.completed || b.total - a.total)
       .slice(0, 5);
   }, [mahallaTasks]);
-  const maxTaskCount = Math.max(...topTasksStats.map((t) => t.total), 1);
 
+  const maxMahallaTaskCount = Math.max(...topMahallaYettiligiStats.map((m) => m.total), 1);
   // Top Mahalla Yettiligi Tasks Ranking Calculation (100% Real from mahallaTasks)
   const topMahallaYettiligiStats = useMemo(() => {
     const mahallaTaskMap: { [mId: string]: { id: string; name: string; total: number; completed: number; inProgress: number; yangi: number } } = {};
